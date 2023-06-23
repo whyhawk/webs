@@ -1,0 +1,36 @@
+$def with (result)
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search anything</title>
+    <style>
+
+      body {
+
+       margin: 0;
+
+       padding: 0;
+
+       display: flex;
+
+       justify-content: center;
+
+       align-items: center;
+
+       height: 100vh;
+
+      }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <h1>Search on web</h1>
+    <form method="POST" action="/">
+        <input type="text" name="text">
+        <input type="submit" value="Submit">
+    </form>
+    <hr>
+    <textarea rows="10" cols="50" readonly>$result</textarea>
+    </div>
+</body>
+</html>
