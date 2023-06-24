@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+import pandas as pd
 import os
 
 app = Flask(__name__)
@@ -11,10 +12,21 @@ def index():
         return render_template('index.html', result=processed_text)
     return render_template('index.html')
 
-def process_input(input_text):
+def process_input(searchword):
     # 在这里进行处理输入内容的逻辑
-    processed_text = input_text
+    processed_text = searchword
+    if searchword[:3] == '-d ':
+        df = pd.read_csv('Israel_road_name.csv',index_col=0,dtype = pd.StringDtype())
+        df = df[df['STREET_NAME CHAR(400)'].str.contains(searchword[3:], na=False) | 
+        df['STREET_NAME CHAR(1000)'].str.contains(searchword[3:], na=False)]
+        processed_text = df.to_string()
+
+    if searchword[:3] == '-a ':
+        df = pd.read_csv('rdf_admin_struct_name_Israel.txt',index_col=0,dtype = pd.StringDtype())
+        df = df[df['ADMIN_PLACE_NAME'].str.contains(searchword[3:], na=False)]
+        processed_text = df.to_string()
+
     return processed_text
 
 if __name__ == '__main__':
-    app.run(debug=True,port=os.getenv("PORT", default=5000),host='0.0.0.0')
+    app.run(debug=True,port=os.getenv("PORT", default=5050),host='0.0.0.0')
