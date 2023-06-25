@@ -26,6 +26,22 @@ def process_input(searchword):
         df = df[df['ADMIN_PLACE_NAME'].str.contains(searchword[3:], na=False)]
         processed_text = df.to_string()
 
+    if searchword[:3] == '-p ':
+        df = pd.read_csv('poi.csv',index_col=False,sep='\t',dtype = pd.StringDtype())
+        df = df[df['Name'].str.contains(searchword[3:], na=False)]
+        processed_text = df.to_string()
+
+    if searchword[:3] == '-c ':
+        df = pd.read_csv('poi.csv',index_col=False,sep='\t',dtype = pd.StringDtype())
+        df = df[df['CategoryId'].str.contains(searchword[3:], na=False)]
+        processed_text = df.to_string()
+
+    if searchword[:3] == '-r ':
+        words = searchword[3:].split()
+        words.reverse()
+        processed_text = ' '.join(words)
+
+
     return processed_text
 
 if __name__ == '__main__':
