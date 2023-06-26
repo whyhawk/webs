@@ -15,26 +15,47 @@ def index():
 def process_input(searchword):
     # 在这里进行处理输入内容的逻辑
     processed_text = searchword
+
+    if len(searchword) <= 3:
+        processed_text = '''
+please search with those key Parameters：
+
+-p search poi Names
+-i search poi Index details
+-c search poi CategoryId
+-d search road Names
+-a search admin Names
+-r reverse words
+'''
+        return processed_text
+
+
     if searchword[:3] == '-d ':
         df = pd.read_csv('Israel_road_name.csv',index_col=0,dtype = pd.StringDtype())
         df = df[df['STREET_NAME CHAR(400)'].str.contains(searchword[3:], na=False) | 
-        df['STREET_NAME CHAR(1000)'].str.contains(searchword[3:], na=False)]
+        df['STREET_NAME CHAR(1000)'].str.contains(searchword[3:],case=False,regex=False)]
         processed_text = df.to_string()
 
     if searchword[:3] == '-a ':
         df = pd.read_csv('rdf_admin_struct_name_Israel.txt',index_col=0,dtype = pd.StringDtype())
-        df = df[df['ADMIN_PLACE_NAME'].str.contains(searchword[3:], na=False)]
+        df = df[df['ADMIN_PLACE_NAME'].str.contains(searchword[3:],case=False,regex=False)]
         processed_text = df.to_string()
 
     if searchword[:3] == '-p ':
         df = pd.read_csv('poi.csv',index_col=False,sep='\t',dtype = pd.StringDtype())
-        df = df[df['Name'].str.contains(searchword[3:], na=False)]
+        df = df[df['Name'].str.contains(searchword[3:],case=False,regex=False)]
         processed_text = df.to_string()
 
     if searchword[:3] == '-c ':
         df = pd.read_csv('poi.csv',index_col=False,sep='\t',dtype = pd.StringDtype())
-        df = df[df['CategoryId'].str.contains(searchword[3:], na=False)]
+        df = df[df['CategoryId'].str.contains(searchword[3:],regex=False)]
         processed_text = df.to_string()
+
+    if searchword[:3] == '-i ':
+        df = pd.read_csv('poi.csv',index_col=False,sep='\t',dtype = pd.StringDtype())
+        row = df.iloc[int(searchword[3:])]
+        #df = df[df['Name'].str.contains(searchword[3:],case=False,regex=False)]
+        processed_text = row.to_string()
 
     if searchword[:3] == '-r ':
         words = searchword[3:].split()
