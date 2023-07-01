@@ -31,28 +31,35 @@ please search with those key Parameters：
 
 
     if searchword[:3] == '-d ':
-        df = pd.read_csv('Israel_road_name.csv',index_col=0,dtype = pd.StringDtype())
+        #df = pd.read_csv('Israel_road_name.csv',index_col=0,dtype = pd.StringDtype())
+        df = pd.read_pickle('Israel_road_name.pkl.bz2',compression='infer')
         df = df[df['STREET_NAME CHAR(400)'].str.contains(searchword[3:], na=False) | 
         df['STREET_NAME CHAR(1000)'].str.contains(searchword[3:],case=False,regex=False)]
         processed_text = df.to_string()
 
     if searchword[:3] == '-a ':
-        df = pd.read_csv('rdf_admin_struct_name_Israel.txt',index_col=0,dtype = pd.StringDtype())
+        #df = pd.read_csv('rdf_admin_struct_name_Israel.txt',index_col=0,dtype = pd.StringDtype())
+        df = pd.read_pickle('rdf_admin_hierarchy.pkl.bz2',compression='infer')
         df = df[df['ADMIN_PLACE_NAME'].str.contains(searchword[3:],case=False,regex=False)]
         processed_text = df.to_string()
 
     if searchword[:3] == '-p ':
-        df = pd.read_csv('poi.csv',index_col=False,sep='\t',dtype = pd.StringDtype())
+        #df = pd.read_csv('poi.csv',index_col=False,sep='\t',dtype = pd.StringDtype())
+        df = pd.read_pickle('poi.pkl.bz2',compression='infer')
         df = df[df['Name'].str.contains(searchword[3:],case=False,regex=False)]
+        df = df[['Name','CategoryId','CategoryName']]
         processed_text = df.to_string()
 
     if searchword[:3] == '-c ':
-        df = pd.read_csv('poi.csv',index_col=False,sep='\t',dtype = pd.StringDtype())
+        #df = pd.read_csv('poi.csv',index_col=False,sep='\t',dtype = pd.StringDtype())
+        df = pd.read_pickle('poi.pkl.bz2',compression='infer')
         df = df[df['CategoryId'].str.contains(searchword[3:],regex=False)]
+        df = df[['Name','CategoryId','CategoryName']]
         processed_text = df.to_string()
 
     if searchword[:3] == '-i ':
-        df = pd.read_csv('poi.csv',index_col=False,sep='\t',dtype = pd.StringDtype())
+        #df = pd.read_csv('poi.csv',index_col=False,sep='\t',dtype = pd.StringDtype())
+        df = pd.read_pickle('poi.pkl.bz2',compression='infer')
         row = df.iloc[int(searchword[3:])]
         #df = df[df['Name'].str.contains(searchword[3:],case=False,regex=False)]
         processed_text = row.to_string()
