@@ -20,13 +20,22 @@
        height: 100vh;
 
       }
+
+      input[type="text"] {
+        width: calc(100% - 100px);
+      }
+
+      input[type="submit"] {
+        width: 85px;
+      }
+
     </style>
 </head>
 <body>
     <div class="container">
     <h3>Search Israel</h3>
     <form action="/" method="post">
-        <input type="text" name="input_text" placeholder="please input here" style="width: 120px;">
+        <input type="text" name="input_text" placeholder="please input here">
         <input type="submit" value="Search">
     </form>
     <br>
