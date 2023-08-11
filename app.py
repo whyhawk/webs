@@ -21,6 +21,7 @@ def process_input(searchword):
 please search with those key Parameters：
 
 -p search poi Names
+-l search address of poi
 -i search poi Index details
 -c search poi CategoryId
 -d search road Names
@@ -47,8 +48,19 @@ please search with those key Parameters：
         #df = pd.read_csv('poi.csv',index_col=False,sep='\t',dtype = pd.StringDtype())
         df = pd.read_pickle('poi.pkl.bz2',compression='infer')
         df = df[df['Name'].str.contains(searchword[3:],case=False,regex=False)]
-        df = df[['Name','CategoryId','CategoryName']]
+        df = df[['Name']]
         processed_text = df.to_string()
+
+    if searchword[:3] == '-l ':
+        #df = pd.read_csv('poi.csv',index_col=False,sep='\t',dtype = pd.StringDtype())
+        df = pd.read_pickle('poi.pkl.bz2',compression='infer')
+        f_Unparse = df['Unparsed'].str.contains(searchword[3:],case=False,regex=False)
+        f_Streetname = df['FullStreetName'].str.contains(searchword[3:],case=False,regex=False)
+        f_combine = f_Unparse | f_Streetname
+        df = df[f_combine]
+        df = df[['Unparsed','FullStreetName']]
+        processed_text = df.to_string()
+
 
     if searchword[:3] == '-c ':
         #df = pd.read_csv('poi.csv',index_col=False,sep='\t',dtype = pd.StringDtype())
