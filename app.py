@@ -20,8 +20,9 @@ def process_input(searchword):
         processed_text = '''
 please search with those key Parameters：
 
+-h search poi PlaceId
 -p search poi Names
--l search address of poi
+-l search poi Address
 -i search poi Index details
 -c search poi CategoryId
 -d search road Names
@@ -49,6 +50,13 @@ please search with those key Parameters：
         df = pd.read_pickle('poi.pkl.bz2',compression='infer')
         df = df[df['Name'].str.contains(searchword[3:],case=False,regex=False)]
         df = df[['Name']]
+        processed_text = df.to_string()
+
+    if searchword[:3] == '-h ':
+        #df = pd.read_csv('poi.csv',index_col=False,sep='\t',dtype = pd.StringDtype())
+        df = pd.read_pickle('poi.pkl.bz2',compression='infer')
+        df = df[df['PlaceId'].str.contains(searchword[3:],case=False,regex=False)]
+        df = df[['PlaceId']]
         processed_text = df.to_string()
 
     if searchword[:3] == '-l ':
